@@ -1,0 +1,32 @@
+﻿
+
+<h2>title</h2>
+
+
+<div class="form-horizontal">
+    <label>Naslov poruke</label>
+    <input name="naslov" class="form-control" />
+</div>
+
+@*
+    Za Ajax je potrebno u References dodati NuGet package Microsoft.jQuery.Unobtrusive.Ajax a zatim ga treba ukljuciti u fajlu \Areas\ModulAdministracija\Views\Shared\_Layout.cshtml
+    na dnu sa <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    Ako umjesto Ajax.BeginForm() koristili Html.BeginForm(), tad bi se na klikom na Snimi, uradila redirekcija na Snimljeno.cshtml jer methoda Operacija1() vraca upravo taj view.
+*@
+@using (Ajax.BeginForm("Operacija1", "TestEditor", new AjaxOptions() { UpdateTargetId = "izlaz" }))
+{
+<div class="form-horizontal">
+    <label>Naslov poruke</label>
+    <input name="naslov" class="form-control" />
+</div>
+                <div class="form-horizontal">
+                    <label>Sadržaj poruke</label>
+                    <textarea name="tekst" class="form-control">  </textarea>
+                </div>
+
+                                <input type="submit" value="Snimi" />
+}
+
+<div id="izlaz">
+
+</div>

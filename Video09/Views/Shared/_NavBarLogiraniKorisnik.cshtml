@@ -1,0 +1,47 @@
+﻿@using MVC.Helper
+@using MVC.Models
+
+@*Ovaj NavBar login menu sa nazivom trenutnog usera i linkovima za module (nalazi se u gornjem desnom uglu) se poziva iz Layouta svakog modula posebno, nije iz glavnog layouta !!!*@
+
+
+@*
+    a) Objekat korisnik mozemo uzeti u \Views\Shared\_NavBarLogiraniKorisnik.cshtml sa @{ Korisnik korisnik = Autentifikacija.GetLogiraniKorisnik(Context); } i koristiti ga kao
+    takvog npr. korisnik.FullName. U ovom slucaju u \Areas\ModulAdministracija\Views\Shared\_Layout.cshtml samo pozivamo Partial view  @Html.Partial("_NavBarLogiraniKorisnik").
+
+    b) Objekat korisnik mozemo uzeti u \Areas\ModulAdministracija\Views\Shared\_Layout.cshtml, ali u tom slucaju u \Areas\ModulAdministracija\Views\Shared\_Layout.cshtml moramo proslijediti
+    taj objekat kroz Partial view u \Views\Shared\_NavBarLogiraniKorisnik.cshtml sa @Html.Partial("_NavBarLogiraniKorisnik", korisnik);, i u \Views\Shared\_NavBarLogiraniKorisnik.cshtml
+    postaviti model tipa korisnik sa @model Korisnik te pristupati atributima preko objekta Model npr. Model.FullName.
+*@
+@*@model Korisnik*@
+
+@*objekat tipa korisnik*@
+@{ Korisnik korisnik = Autentifikacija.GetLogiraniKorisnik(Context); }
+
+<li class="dropdown">
+
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">@korisnik.FullName <span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+
+        <li><a href="/Home">Home</a></li>
+
+        @if (korisnik.Administrator != null)
+        {
+<li><a href="/ModulAdministracija/Home">Administracija</a></li>
+}
+        @if (korisnik.Nastavnik != null)
+        {
+<li><a href="/ModulEdukatori/Home">Edukator</a></li>
+}
+        @if (korisnik.Referent != null)
+        {
+<li><a href="/ModulStudentskaSluzba/Home">Studentska služba</a></li>
+}
+        @if (korisnik.Student != null)
+        {
+<li><a href="/ModulStudenti/Home">Studenti</a></li>
+}
+
+        <li class="divider"></li>
+        <li>@Html.ActionLink("Logout", "Logout", "Login", new { area = "" }, new { })</li> @*moramo postavity empty area jer prelazimo iz jedne u drugu areu*@
+    </ul>
+</li>

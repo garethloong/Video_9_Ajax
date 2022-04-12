@@ -1,0 +1,54 @@
+﻿@using MVC.Areas.ModulAdministracija.Models
+@model MVC.Areas.ModulAdministracija.Models.PredajeIndexVM
+
+<!-- Uklanjamo layout \Areas\ModulAdministracija\Views\Shared\_Layout.cshtml jer ce ovaj View biti Ajaxom uglavljen u \Areas\ModulAdministracija\Views\Predmet\Index.cshtml pa da 
+    se ne ponavlja, da nemamo dupli header i footer tj. da se ne bi 2 puta ucitao navigation bar (header) kao i svi fajlovi navedeni u footeru. -->
+@{ Layout = null; }
+
+<h3>@Model.PredmetNaziv</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nastavnik</th>
+            <th>AkademskaGodina</th>
+            <th>Akcija</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (PredajeIndexVM.PredajeInfo x in Model.PredajeList)
+        {
+        <tr>
+            <td>@x.Nastavnik</td>
+            <td>@x.AkademskaGodina</td>
+            <td>
+                @using (Ajax.BeginForm("Obrisi", "Predaje", new AjaxOptions() { UpdateTargetId = "predavaci-output" }, new { @style = "display: inline" }))
+                {
+                        @Html.Hidden("predajeId", x.Id)
+                        <input type="submit" value="Obriši" class="btn btn-danger btn-sm" />}
+
+                @using (Ajax.BeginForm("Uredi", "Predaje", new { }, new AjaxOptions() { UpdateTargetId = "predavaci-output" }, new { @style = "display: inline" }))
+                {
+                        @Html.Hidden("predajeId", x.Id)
+                        <input type="submit" value="Uredi" class="btn btn-info btn-sm" />}
+            </td>
+        </tr>
+       }
+    </tbody>
+</table>
+
+@* Standardni HTML reload poziv *@
+@*@Html.ActionLink("Dodaj", "Dodaj", new { predmetId = Model.PredmetId }, new { @class = "btn btn-success btn-sm" })*@
+
+@* Ajax poziv *@
+@using (Ajax.BeginForm("Dodaj", "Predaje", new AjaxOptions() { UpdateTargetId = "predavaci-output" }))
+{
+        @Html.Hidden("predmetId", Model.PredmetId)
+        <input type="submit" value="Dodaj novi" class="btn btn-success btn-sm" />
+}
+
+
+
+
+
